@@ -92,12 +92,16 @@ public class ListaSimples implements ListaOperacoes{
 
     @Override
     public int removerTodas(String elemento) {
-        for (int i = 0; i < this.lista.length; i++) {
-            if (this.lista.equals(elemento)) {
-                this.lista[this.buscarElemento(elemento)] = null;
+        int quantidadeRemovida = 0;
+        if (!estaVazio()) {
+                for (int i = 0; i < this.lista.length; i++) {
+                    if (this.lista[i] == elemento) {
+                        this.lista[i] = null;
+                        quantidadeRemovida++;
+                    }
+                }System.out.println(quantidadeRemovida + " intancias do elemento: "+ elemento + " removidos com sucesso!");
             }
-            
-        }
+        return -1;
     }
 
     @Override
@@ -115,14 +119,20 @@ public class ListaSimples implements ListaOperacoes{
     @Override
     public int adicionarVarios(String[] elementos) {
         if (!estaCheia()) {
-            this.lista[encontrarPosicaoVazia()] = elemento;
-            System.out.println("Elemento " + elemento + " adicionado com sucesso!");
+            for (int i = 0; i < elementos.length; i++) {
+                this.lista[encontrarPosicaoVazia()] = elementos[i]; 
+
+            }System.out.println("Foram adicionados" + (elementos.length) + " elementos com sucesso");
+            return elementos.length;
+        
         }
+        System.out.println("A lista não conteve todos os objetos");
+        return -1; 
     }
 
     @Override
     public String obter(int indice) {
-        if (indice > 0 && indice < this.lista.length) {
+        if (indice >= 0 && indice < this.lista.length) {
             for (int i = 0; i < this.lista.length; i++) {
                 if (this.lista[i] == this.lista[indice]) {
                     return this.lista[indice];
@@ -133,14 +143,28 @@ public class ListaSimples implements ListaOperacoes{
 
     @Override
     public boolean inserir(int indice, String elemento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'inserir'");
+        int tamanho = contar();
+        if (indice >= 0 && indice < this.lista.length) {
+
+            for (int i = tamanho-1; i >= indice; i--) {
+                this.lista[i + 1] = this.lista[i];
+            }
+            this.lista[indice] = elemento;
+            return true;
+        }return false;
     }
 
     @Override
     public String removerPorIndice(int indice) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removerPorIndice'");
+        if (indice >= 0 && indice < this.lista.length) {
+            String lembrarIndice = this.lista[indice];
+            this.lista[indice] = null;
+            for (int i = indice; i < this.lista.length -1; i++) {
+                this.lista[i] = this.lista[i+1];
+            }
+            this.lista[this.lista.length-1] = null;
+            return "Indice " + indice + " removido, ele contia: " + lembrarIndice + " e foi substituido por: " + this.lista[indice];
+        }else return "indice indicado não existe";
     }
 
     @Override
