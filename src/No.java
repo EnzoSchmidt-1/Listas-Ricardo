@@ -1,11 +1,13 @@
 public class No {
-    private String conteudo;
-    private No prox;
+    protected String valor;
+    protected No prox;
 
-    public No(String conteudo) {
-        this.conteudo = conteudo;
+    public No(String valor) {
+        this.valor = valor;
         this.prox = null;
     }
+    /*
+    
     public No getProx(){
         return prox;
     }
@@ -20,5 +22,7 @@ public class No {
     public void setConteudo(String conteudo) {
         this.conteudo = conteudo;
     }
+
+     */
 
 }
