@@ -1,143 +1,216 @@
 public class ListaDinamica implements ListaOperacoes{
-    No inicio;
+    private No inicio;
+    private int tamanho;
 
     public ListaDinamica() {
-        this.inicio = new No(null);
-        System.out.println("Lista Dinâmica criada com sucesso!");
+        inicio = null;
+        tamanho = 0;
     }
 
-    public void adicionarElemento(String conteudo) {
-        if(!this.existeInicio()) {
-            this.inicio.setConteudo(conteudo);
-        } else {
-            No novoNo = new No(conteudo);
-            No aux = this.inicio;
-            while(aux.getProx() != null) {
-                aux = aux.getProx();
-            }
-            aux.setProx(novoNo);
-        }
-    }
-
-    private boolean existeInicio() {
-        if(this.inicio.getConteudo() == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     public void exibirElementos() {
-        if(existeInicio()) {
-            No aux = this.inicio;
-            while(aux.getProx() != null) {
-                System.out.println(aux.getConteudo());
-                aux = aux.getProx();
-            }
-            System.out.println(aux.getConteudo());
-        } else {
-            System.out.println("Não existem elementos na Lista Dinâmica.");
+        No atual = inicio;
+        int i = 0;
+
+        while (atual != null){
+            System.out.println("[" + i + "]" + atual.valor);
+            atual = atual.prox;
+            i++;
+        }
+        if (tamanho == 0){
+            System.out.println("A lista está vazia ");
         }
     }
 
-    public void removerElemento(String elemento) {
-        if(existeInicio()) {
-            if(buscarElemento(elemento)) {
-                //removendo primeiro
-                if(this.inicio.getConteudo().equals(elemento)) {
-                    this.inicio = this.inicio.getProx();
-                } else if(this.inicio.getProx() != null) {
-                    No aux = this.inicio;
-                    do {
-                        if(aux.getProx().getConteudo().equals(elemento)) {
-                            aux.setProx(aux.getProx().getProx());
-                            return;
-                        }
-                        aux = aux.getProx();
-                    } while (aux != null);
+    public boolean removerElemento(String elemento) {
+        No atual = inicio;
+        No anterior = null;
+
+        while (atual != null){
+            if (atual.valor.equals(elemento)){
+                if (anterior == null){
+                    inicio = atual.prox;
                 } else {
-                    this.inicio.setConteudo(null);
+                    anterior.prox = atual.prox;
                 }
-
-                //removendo intermediário
-                //método de busca
-            }
-
-        } else {
-            System.out.println("Não existem elementos na lista.");
-        }
-    }
-
-    public boolean buscarElemento(String elemento) {
-        No aux = this.inicio;
-
-        do {
-            if(aux.getConteudo().equals(elemento)) {
-                System.out.println("Elemento " + elemento + " encontrado.");
+                tamanho--;
                 return true;
             }
-            aux = aux.getProx();
-        } while(aux != null);
-        System.out.println("Elemento " + elemento + " não encontrado!");
+            anterior = atual;
+            atual = atual.prox;
+        }
         return false;
+    }
+
+    public boolean adicionarElemento(String elemento) {
+        No novo = new No(elemento);
+
+        if (inicio == null){
+            inicio = novo;
+        } else {
+            No atual = inicio;
+
+            while (atual.prox != null){
+                atual = atual.prox;
+            }
+            atual.prox = novo;
+        }
+        tamanho++;
+        return true;
     }
     
     @Override
     public int removerTodas(String elemento){
-        return 0;
+        int removidos = 0;
 
+        No atual = inicio;
+        No anterior = null;
+
+        while (atual != null){
+            if (atual.valor.equals(elemento)){
+                if (anterior == null){
+                    inicio = atual.prox;
+                    
+                }else anterior.prox = atual.prox;
+
+                tamanho--;
+                removidos++;
+            } else {
+                anterior = atual;
+            }
+            atual = atual.prox;
+        }
+
+        return removidos;
     }
     
     @Override
     public int contar(){
-        return 0;
+        return tamanho;
 
     }
     
     @Override
     public void limpar(){
-
+        inicio = null;
+        tamanho = 0;
     }
     
     @Override
     public String removerPorIndice(int indice){
-        
-        return "";
+        if (indice < 0 || indice >= tamanho){
+            return null;
+        }
+
+        No removido;
+
+        if (indice == 0 ){
+            removido = inicio;
+            inicio = inicio.prox;
+        } else {
+            No atual = inicio;
+
+            for (int i=0; i < indice - 1; i++){
+                atual = atual.prox;
+            }
+            removido = atual.prox;
+            atual.prox = removido.prox;
+        }
+        tamanho--;
+        return removido.valor;
     }
 
     @Override
     public int adicionarVarios(String[] elementos) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'adicionarVarios'");
+        int adicionados = 0;
+
+        for (String e : elementos){
+            adicionarElemento(e);
+            adicionados++;
+        }
+        return adicionados;
     }
 
     @Override
     public String obter(int indice) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obter'");
+        if (indice < 0 || indice >= tamanho){
+            return null;
+        }
+        No atual = inicio;
+
+        for (int i=0; i<indice;i++){
+            atual = atual.prox;
+        }
+
+        return atual.valor;
     }
 
     @Override
     public boolean inserir(int indice, String elemento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'inserir'");
+        if (indice < 0 || indice > tamanho){
+            return false;
+        }
+        No novo = new No(elemento);
+        if (indice == 0){
+            novo.prox = inicio;
+            inicio = novo;
+        } else {
+            No atual = inicio;
+            for (int i=0; i<indice - 1; i++){
+                atual = atual.prox;
+            }
+            novo.prox = atual.prox;
+            atual.prox = novo;
+        }
+        tamanho++;
+        return true;
     }
 
     @Override
     public int ultimoIndiceDe(String elemento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ultimoIndiceDe'");
+        int indice = 0;
+        int ultimo = -1;
+
+        No atual = inicio;
+
+        while (atual != null){
+            if (atual.valor.equals(elemento)) {
+                ultimo = indice;
+            }
+            atual = atual.prox;
+            indice++;
+        }
+        return ultimo;
     }
 
     @Override
     public int contarOcorrencias(String elemento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'contarOcorrencias'");
+        int cont = 0;
+
+        No atual= inicio;
+
+        while (atual != null){
+            if (atual.valor.equals(elemento)){
+                cont++;
+            }
+            atual = atual.prox;
+        }
+        return cont;
     }
 
     @Override
     public int substituir(String antigo, String novo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'substituir'");
+        int cont = 0;
+
+        No atual = inicio;
+
+        while (atual != null){
+            if (atual.valor.equals(antigo)){
+                atual.valor = novo;
+                cont++;
+            }
+            atual = atual.prox;
+        }
+        return cont;
     }
 }
