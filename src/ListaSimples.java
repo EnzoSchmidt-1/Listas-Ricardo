@@ -1,5 +1,5 @@
 public class ListaSimples implements ListaOperacoes{
-    String[] lista;
+    private String[] lista;
 
     public ListaSimples(int tamanho) {
         this.lista = new String[tamanho];
@@ -121,13 +121,14 @@ public class ListaSimples implements ListaOperacoes{
         int quantidadeAdicionados = 0;
         if (!estaCheia()) {
             for (int i = 0; i < elementos.length; i++) {
-                if (contar() == this.lista.length) {
+                this.lista[encontrarPosicaoVazia()] = elementos[i]; 
+                quantidadeAdicionados++;
+                if (this.lista.length == contar()) {
                     return quantidadeAdicionados;
                 }
-                quantidadeAdicionados++;
-                this.lista[encontrarPosicaoVazia()] = elementos[i]; 
+
             
-            }return quantidadeAdicionados;
+            }
         
         }return quantidadeAdicionados; 
     }
