@@ -101,7 +101,7 @@ public class ListaSimples implements ListaOperacoes{
                     }
                 }System.out.println(quantidadeRemovida + " intancias do elemento: "+ elemento + " removidos com sucesso!");
             }
-        return -1;
+        return quantidadeRemovida;
     }
 
     @Override
@@ -118,16 +118,18 @@ public class ListaSimples implements ListaOperacoes{
 
     @Override
     public int adicionarVarios(String[] elementos) {
+        int quantidadeAdicionados = 0;
         if (!estaCheia()) {
             for (int i = 0; i < elementos.length; i++) {
+                if (contar() == this.lista.length) {
+                    return quantidadeAdicionados;
+                }
+                quantidadeAdicionados++;
                 this.lista[encontrarPosicaoVazia()] = elementos[i]; 
-
-            }System.out.println("Foram adicionados" + (elementos.length) + " elementos com sucesso");
-            return elementos.length;
+            
+            }return quantidadeAdicionados;
         
-        }
-        System.out.println("A lista não conteve todos os objetos");
-        return -1; 
+        }return quantidadeAdicionados; 
     }
 
     @Override
@@ -164,7 +166,8 @@ public class ListaSimples implements ListaOperacoes{
             }
             this.lista[this.lista.length-1] = null;
             return "Indice " + indice + " removido, ele contia: " + lembrarIndice + " e foi substituido por: " + this.lista[indice];
-        }else return "indice indicado não existe";
+        
+        }else return null;
     }
 
     @Override
@@ -180,20 +183,38 @@ public class ListaSimples implements ListaOperacoes{
 
     @Override
     public int ultimoIndiceDe(String elemento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ultimoIndiceDe'");
+        if (!estaVazio()) {
+            for (int i = this.lista.length-1; i > 0; i--) {
+                if (this.lista[i] == elemento) {
+                    return i;
+                }
+            }
+        }return -1;
     }
 
     @Override
     public int contarOcorrencias(String elemento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'contarOcorrencias'");
+        int contagem = 0; 
+        if (!estaVazio()) {
+            for (int i = 0; i < this.lista.length; i++) {
+                if (this.lista[i] == elemento) {
+                    contagem++;
+                }
+            } return contagem;
+        } return 0; 
     }
 
     @Override
     public int substituir(String antigo, String novo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'substituir'");
-    } 
+        int quantidadeSubst = 0;
+        if(!estaVazio()){
+            for(int i = 0; i < lista.length; i++){
+                if(this.lista[i] == antigo){
+                    this.lista[i] = novo;
+                    quantidadeSubst++;
+                }
+            }
+        }return quantidadeSubst;
+    }
 
 }
